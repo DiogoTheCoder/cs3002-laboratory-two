@@ -1,11 +1,13 @@
-#mydata = read.csv('//Users//diogocosta//Work//computer-science//cs3002//cs3002-laboratory-two//spaeth_01.csv', sep=",")
-#mydata = read.csv('//Users//diogocosta//Work//computer-science//cs3002//cs3002-laboratory-two//spaeth_02.csv', sep=",")
-#mydata = read.csv('//Users//diogocosta//Work//computer-science//cs3002//cs3002-laboratory-two//spaeth_03.csv', sep=",")
-#mydata = read.csv('//Users//diogocosta//Work//computer-science//cs3002//cs3002-laboratory-two//spaeth_04.csv', sep=",")
-#mydata = read.csv('//Users//diogocosta//Work//computer-science//cs3002//cs3002-laboratory-two//spaeth_05.csv', sep=",")
+setwd("/Users/diogocosta/Work/computer-science/cs3002/cs3002-laboratory-two")
+
+#mydata = read.csv('spaeth_01.csv', sep=",")
+#mydata = read.csv('spaeth_02.csv', sep=",")
+#mydata = read.csv('spaeth_03.csv', sep=",")
+#mydata = read.csv('spaeth_04.csv', sep=",")
+#mydata = read.csv('spaeth_05.csv', sep=",")
 
 # Iris
-mydata = read.csv('//Users//diogocosta//Work//computer-science//cs3002//cs3002-laboratory-two//iris.csv', sep=",")
+mydata = read.csv('iris.csv', sep=",")
 
 plot(mydata)
 
@@ -28,11 +30,11 @@ for (numOfClusters in seq(from=2, to=22)) {
   # other options include: average, complete and single
   fit <- hclust(d, method="average")
   
-  # Plot dendrogram
-  #plot(fit)
-  
   Hgroups <- cutree(fit, k=numOfClusters)
   rect.hclust(fit, k=numOfClusters, border="red")
+  
+  # Plot dendrogram
+  #plot(fit)
   
   #plot(mydata, col=Hgroups)
   
@@ -44,7 +46,7 @@ for (numOfClusters in seq(from=2, to=22)) {
   
   # WK takes in two clusterings and returns the Weighted Kappa between them
   # so to calculate the WK value between the hierarchical and k-means methods use
-  source('//Users//diogocosta//Work//computer-science//cs3002//cs3002-laboratory-two//WK_R.r')
+  source('WK_R.r')
   
   
   # The is the agreement strength between two cluster arrangements
@@ -67,7 +69,7 @@ for (numOfClusters in seq(from=2, to=22)) {
 
 plot(matrix, xlab = 'Num of Clusters', ylab = 'Weighted Kappa')
 
-write.csv(Hgroups, file = '//Users//diogocosta//Work//computer-science//cs3002//cs3002-laboratory-two//Hgroups.csv')
+write.csv(Hgroups, file = 'Hgroups.csv')
 
 install.packages("arules")
 install.packages("arulesViz")
@@ -82,7 +84,7 @@ grocery_rules <- apriori(Groceries, parameter = list(support = 0.01, confidence 
 #inspect first 3 sorted by confidence
 inspect(head(sort(grocery_rules, by = 'confidence'), 3))
 
-patientData = read.csv('//Users//diogocosta//Work//computer-science//cs3002//cs3002-laboratory-two//patients.csv', sep=",", row.names = 1)
+patientData = read.csv('patients.csv', sep=",", row.names = 1)
 top3 <- patientData[0:3]
 patientEuclideanD <- sum(dist(top3, method = "euclidean"))
 patientManhattanD <- dist(top3, method = "manhattan")
