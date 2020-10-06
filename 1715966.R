@@ -71,3 +71,18 @@ write.csv(Hgroups, file = '//Users//diogocosta//Work//computer-science//cs3002//
 
 install.packages("arules")
 install.packages("arulesViz")
+
+library(arules)
+data('Groceries')
+#inspect first 3 transactions
+inspect(head(Groceries, 3))
+
+#Apriori Algorithm - generate rules
+grocery_rules <- apriori(Groceries, parameter = list(support = 0.01, confidence = 0.5))
+#inspect first 3 sorted by confidence
+inspect(head(sort(grocery_rules, by = 'confidence'), 3))
+
+patientData = read.csv('//Users//diogocosta//Work//computer-science//cs3002//cs3002-laboratory-two//patients.csv', sep=",", row.names = 1)
+top3 <- patientData[0:3]
+patientEuclideanD <- sum(dist(top3, method = "euclidean"))
+patientManhattanD <- dist(top3, method = "manhattan")
