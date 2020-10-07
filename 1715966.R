@@ -8,6 +8,7 @@ setwd("/Users/diogocosta/Work/computer-science/cs3002/cs3002-laboratory-two")
 
 # Iris
 mydata = read.csv('iris.csv', sep=",")
+irisreal = read.csv('iris_real.csv', sep=",")
 
 plot(mydata)
 
@@ -17,14 +18,14 @@ mydata = na.omit(mydata) # deletion of missing data
 #mydata = scale(mydata) # standardise variables
 
 matrix <- matrix('', 21, 2)
+matrixHGroups <- matrix('', 21, 2)
+matrixKGroups <- matrix('', 21, 2)
 
 for (numOfClusters in seq(from=2, to=22)) {
   # Use the Euclidean form of measuring distance,
   # and generate a distance matrix
   # other options include: euclidean, manhattan
   d <- dist(mydata, method = "manhattan")
-  
-  clusterAmount <- 3
   
   # Hierarchical Clustering
   # other options include: average, complete and single
@@ -59,15 +60,26 @@ for (numOfClusters in seq(from=2, to=22)) {
   
   # Single linkage method: getting 
   wk = WK_R(Kgroups, Hgroups)
+  wkH = WK_R(Hgroups, irisreal$X1)
+  wkK = WK_R(Kgroups, irisreal$X1)
   
   #plot(mydata, col=Kgroups)
   #plot(mydata, col=Hgroups)
   
   matrix[numOfClusters - 1,1] <- numOfClusters
   matrix[numOfClusters - 1,2] <- wk
+  
+  matrixHGroups[numOfClusters - 1,1] <- numOfClusters
+  matrixHGroups[numOfClusters - 1,2] <- wkH
+  
+  matrixKGroups[numOfClusters - 1,1] <- numOfClusters
+  matrixKGroups[numOfClusters - 1,2] <- wkK
 }
 
-plot(matrix, xlab = 'Num of Clusters', ylab = 'Weighted Kappa')
+plot(matrix, main = 'H and K groups', xlab = 'Num of Clusters', ylab = 'Weighted Kappa')
+plot(matrixHGroups, main = 'H groups', xlab = 'Num of Clusters', ylab = 'Weighted Kappa')
+plot(matrixKGroups, main = 'K groups' , xlab = 'Num of Clusters', ylab = 'Weighted Kappa')
+
 
 write.csv(Hgroups, file = 'Hgroups.csv')
 
