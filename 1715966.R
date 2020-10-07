@@ -21,6 +21,10 @@ matrix <- matrix('', 21, 2)
 matrixHGroups <- matrix('', 21, 2)
 matrixKGroups <- matrix('', 21, 2)
 
+# WK takes in two clusterings and returns the Weighted Kappa between them
+# so to calculate the WK value between the hierarchical and k-means methods use
+source('WK_R.r')
+
 for (numOfClusters in seq(from=2, to=22)) {
   # Use the Euclidean form of measuring distance,
   # and generate a distance matrix
@@ -44,11 +48,6 @@ for (numOfClusters in seq(from=2, to=22)) {
   mean <- aggregate(mydata,by=list(fit$cluster),FUN=mean)
   Kgroups = fit$cluster
   #plot(mydata, col=Kgroups)
-  
-  # WK takes in two clusterings and returns the Weighted Kappa between them
-  # so to calculate the WK value between the hierarchical and k-means methods use
-  source('WK_R.r')
-  
   
   # The is the agreement strength between two cluster arrangements
   # −1 <= WK <= 0: Very Poor
