@@ -25,14 +25,15 @@ matrixKGroups <- matrix('', 21, 2)
 # so to calculate the WK value between the hierarchical and k-means methods use
 source('WK_R.r')
 
+# Use the Euclidean form of measuring distance,
+# and generate a distance matrix
+# other options include: euclidean, manhattan
+d <- dist(mydata, method = "manhattan")
+
 for (numOfClusters in seq(from=2, to=22)) {
-  # Use the Euclidean form of measuring distance,
-  # and generate a distance matrix
-  # other options include: euclidean, manhattan
-  d <- dist(mydata, method = "manhattan")
-  
   # Hierarchical Clustering
   # other options include: average, complete and single
+  # OBJECT NEEDS TO BE RE-CREATED
   fit <- hclust(d, method="average")
   
   Hgroups <- cutree(fit, k=numOfClusters)
