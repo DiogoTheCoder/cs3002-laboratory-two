@@ -39,10 +39,12 @@ for (distance in distances) {
     fit <- hclust(d, method="average")
     
     Hgroups <- cutree(fit, k=numOfClusters)
-    #rect.hclust(fit, k=numOfClusters, border="red")
     
     # Plot dendrogram
     #plot(fit)
+    
+    # Add cluster boxes
+    #rect.hclust(fit, k=numOfClusters, border="red")
     
     #plot(mydata, col=Hgroups)
     
@@ -68,8 +70,8 @@ for (distance in distances) {
     #plot(mydata, col=Kgroups)
     #plot(mydata, col=Hgroups)
     
-    matrix[numOfClusters - 1,1] <- numOfClusters
-    matrix[numOfClusters - 1,2] <- wk
+    #matrix[numOfClusters - 1,1] <- numOfClusters
+    #matrix[numOfClusters - 1,2] <- wk
     
     matrixHGroups[numOfClusters - 1,1] <- numOfClusters
     matrixHGroups[numOfClusters - 1,2] <- wkH
