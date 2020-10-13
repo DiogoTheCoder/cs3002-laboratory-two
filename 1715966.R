@@ -28,75 +28,78 @@ source('WK_R.r')
 # Use the Euclidean form of measuring distance,
 # and generate a distance matrix
 # other options include: euclidean, manhattan
-d <- dist(mydata, method = "manhattan")
 
-for (numOfClusters in seq(from=2, to=22)) {
-  # Hierarchical Clustering
-  # other options include: average, complete and single
-  # OBJECT NEEDS TO BE RE-CREATED
-  fit <- hclust(d, method="average")
+distances <- c("euclidean", "manhattan")
+for (distance in distances) {
+  d <- dist(mydata, method = distance)
+  for (numOfClusters in seq(from=2, to=22)) {
+    # Hierarchical Clustering
+    # other options include: average, complete and single
+    # OBJECT NEEDS TO BE RE-CREATED
+    fit <- hclust(d, method="average")
+    
+    Hgroups <- cutree(fit, k=numOfClusters)
+    #rect.hclust(fit, k=numOfClusters, border="red")
+    
+    # Plot dendrogram
+    #plot(fit)
+    
+    #plot(mydata, col=Hgroups)
+    
+    # K-means clustering
+    fit <- kmeans(mydata, numOfClusters)
+    mean <- aggregate(mydata,by=list(fit$cluster),FUN=mean)
+    Kgroups = fit$cluster
+    #plot(mydata, col=Kgroups)
+    
+    # The is the agreement strength between two cluster arrangements
+    # −1 <= WK <= 0: Very Poor
+    # 0 < WK <= 0.2: Poor
+    # 0.2 < WK <= 0.4: Fair
+    # 0.4 < WK <= 0.6: Moderate
+    # 0.6 < WK <= 0.8: Good
+    # 0.8 < WK <= 1: Very Good
+    
+    # Single linkage method: getting 
+    #wk = WK_R(Kgroups, Hgroups)
+    wkH = WK_R(Hgroups, irisreal$X1)
+    wkK = WK_R(Kgroups, irisreal$X1)
+    
+    #plot(mydata, col=Kgroups)
+    #plot(mydata, col=Hgroups)
+    
+    matrix[numOfClusters - 1,1] <- numOfClusters
+    matrix[numOfClusters - 1,2] <- wk
+    
+    matrixHGroups[numOfClusters - 1,1] <- numOfClusters
+    matrixHGroups[numOfClusters - 1,2] <- wkH
+    
+    matrixKGroups[numOfClusters - 1,1] <- numOfClusters
+    matrixKGroups[numOfClusters - 1,2] <- wkK
+  }
   
-  Hgroups <- cutree(fit, k=numOfClusters)
-  rect.hclust(fit, k=numOfClusters, border="red")
-  
-  # Plot dendrogram
-  #plot(fit)
-  
-  #plot(mydata, col=Hgroups)
-  
-  # K-means clustering
-  fit <- kmeans(mydata, numOfClusters)
-  mean <- aggregate(mydata,by=list(fit$cluster),FUN=mean)
-  Kgroups = fit$cluster
-  #plot(mydata, col=Kgroups)
-  
-  # The is the agreement strength between two cluster arrangements
-  # −1 <= WK <= 0: Very Poor
-  # 0 < WK <= 0.2: Poor
-  # 0.2 < WK <= 0.4: Fair
-  # 0.4 < WK <= 0.6: Moderate
-  # 0.6 < WK <= 0.8: Good
-  # 0.8 < WK <= 1: Very Good
-  
-  # Single linkage method: getting 
-  wk = WK_R(Kgroups, Hgroups)
-  wkH = WK_R(Hgroups, irisreal$X1)
-  wkK = WK_R(Kgroups, irisreal$X1)
-  
-  #plot(mydata, col=Kgroups)
-  #plot(mydata, col=Hgroups)
-  
-  matrix[numOfClusters - 1,1] <- numOfClusters
-  matrix[numOfClusters - 1,2] <- wk
-  
-  matrixHGroups[numOfClusters - 1,1] <- numOfClusters
-  matrixHGroups[numOfClusters - 1,2] <- wkH
-  
-  matrixKGroups[numOfClusters - 1,1] <- numOfClusters
-  matrixKGroups[numOfClusters - 1,2] <- wkK
+  #plot(matrix, main = paste('H and K groups vs Iris real', distance), xlab = 'Num of Clusters', ylab = 'Weighted Kappa')
+  plot(matrixHGroups, main = paste('Hierchical vs Iris real', distance), xlab = 'Num of Clusters', ylab = 'Weighted Kappa')
+  plot(matrixKGroups, main = paste('K-Means vs Iris real', distance) , xlab = 'Num of Clusters', ylab = 'Weighted Kappa') 
 }
 
-plot(matrix, main = 'H and K groups', xlab = 'Num of Clusters', ylab = 'Weighted Kappa')
-plot(matrixHGroups, main = 'H groups', xlab = 'Num of Clusters', ylab = 'Weighted Kappa')
-plot(matrixKGroups, main = 'K groups' , xlab = 'Num of Clusters', ylab = 'Weighted Kappa')
 
+#write.csv(Hgroups, file = 'Hgroups.csv')
 
-write.csv(Hgroups, file = 'Hgroups.csv')
+#install.packages("arules")
+#install.packages("arulesViz")
 
-install.packages("arules")
-install.packages("arulesViz")
-
-library(arules)
-data('Groceries')
+#library(arules)
+#data('Groceries')
 #inspect first 3 transactions
-inspect(head(Groceries, 3))
+#inspect(head(Groceries, 3))
 
 #Apriori Algorithm - generate rules
-grocery_rules <- apriori(Groceries, parameter = list(support = 0.01, confidence = 0.5))
+#grocery_rules <- apriori(Groceries, parameter = list(support = 0.01, confidence = 0.5))
 #inspect first 3 sorted by confidence
-inspect(head(sort(grocery_rules, by = 'confidence'), 3))
+#inspect(head(sort(grocery_rules, by = 'confidence'), 3))
 
-patientData = read.csv('patients.csv', sep=",", row.names = 1)
-top3 <- patientData[0:3]
-patientEuclideanD <- sum(dist(top3, method = "euclidean"))
-patientManhattanD <- dist(top3, method = "manhattan")
+#patientData = read.csv('patients.csv', sep=",", row.names = 1)
+#top3 <- patientData[0:3]
+#patientEuclideanD <- sum(dist(top3, method = "euclidean"))
+#patientManhattanD <- dist(top3, method = "manhattan")
