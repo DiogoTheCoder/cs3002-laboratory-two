@@ -1,14 +1,14 @@
 setwd("/Users/diogocosta/Work/computer-science/cs3002/cs3002-laboratory-two")
 
-#mydata = read.csv('spaeth_01.csv', sep=",")
-#mydata = read.csv('spaeth_02.csv', sep=",")
-#mydata = read.csv('spaeth_03.csv', sep=",")
-#mydata = read.csv('spaeth_04.csv', sep=",")
-#mydata = read.csv('spaeth_05.csv', sep=",")
+#mydata = read.csv('spaeth_01.csv', sep=",", header = FALSE)
+#mydata = read.csv('spaeth_02.csv', sep=",", header = FALSE)
+#mydata = read.csv('spaeth_03.csv', sep=",", header = FALSE)
+#mydata = read.csv('spaeth_04.csv', sep=",", header = FALSE)
+#mydata = read.csv('spaeth_05.csv', sep=",", header = FALSE)
 
 # Iris
-mydata = read.csv('iris.csv', sep=",")
-irisreal = read.csv('iris_real.csv', sep=",")
+mydata = read.csv('iris.csv', sep=",", header = FALSE)
+irisreal = read.csv('iris_real.csv', sep=",", header = FALSE)
 
 plot(mydata)
 
@@ -39,10 +39,12 @@ for (distance in distances) {
     fit <- hclust(d, method="average")
     
     Hgroups <- cutree(fit, k=numOfClusters)
-    #rect.hclust(fit, k=numOfClusters, border="red")
     
     # Plot dendrogram
     #plot(fit)
+    
+    # Add cluster boxes
+    #rect.hclust(fit, k=numOfClusters, border="red")
     
     #plot(mydata, col=Hgroups)
     
@@ -68,8 +70,8 @@ for (distance in distances) {
     #plot(mydata, col=Kgroups)
     #plot(mydata, col=Hgroups)
     
-    matrix[numOfClusters - 1,1] <- numOfClusters
-    matrix[numOfClusters - 1,2] <- wk
+    #matrix[numOfClusters - 1,1] <- numOfClusters
+    #matrix[numOfClusters - 1,2] <- wk
     
     matrixHGroups[numOfClusters - 1,1] <- numOfClusters
     matrixHGroups[numOfClusters - 1,2] <- wkH
