@@ -64,8 +64,8 @@ for (distance in distances) {
     
     # Single linkage method: getting 
     #wk = WK_R(Kgroups, Hgroups)
-    wkH = WK_R(Hgroups, irisreal$X1)
-    wkK = WK_R(Kgroups, irisreal$X1)
+    wkH = WK_R(Hgroups, irisreal$V1)
+    wkK = WK_R(Kgroups, irisreal$V1)
     
     #plot(mydata, col=Kgroups)
     #plot(mydata, col=Hgroups)
